@@ -4,7 +4,7 @@
  $dbHost = 'localhost';
  $dbName = 'renstra';
  $dbUsername = 'root';
- $dbPassword = 'Okokokdalll1';
+ $dbPassword = '';
 
  $mysql = mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName);
 

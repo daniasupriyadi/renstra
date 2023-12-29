@@ -1,25 +1,5 @@
 <?php
 require 'config.php';
-
-// Fetch data
-$indikator_kinerja_unit = mysqli_query(
-    $mysql, 
-    "SELECT 
-        ik.indikator_kinerja_id, 
-        ik.tujuan, 
-        ik.sasaran_kegiatan, 
-        ik.kode, 
-        ik.unit_id,
-        u.nama_unit, 
-        ik.indikator_kinerja_kegiatan, 
-        ik.indikator_kinerja_sub_kegiatan, 
-        ik.indikator_kinerja_unit_kerja,
-        ik.target, 
-        ik.satuan
-    FROM 
-        Indikator_Kinerja AS ik
-    INNER JOIN UNIT AS u
-    ON ik.unit_id=u.unit_id");
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +15,8 @@ $indikator_kinerja_unit = mysqli_query(
     <link href="css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
         crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous">
     </script>
 </head>
@@ -96,64 +78,83 @@ $indikator_kinerja_unit = mysqli_query(
                     <div class="card mb-4">
                         <div class="card-header">
                             <div class="d-flex align-items-center">
-                                <h2 class="">Rencana Strategis</h2>
-                                <!-- Button to Open the Modal -->
-                                <div class="d-flex align-items-center ml-3">
-                                    <a href="add_renstra.php" class="btn btn-primary" data-target="">
-                                        Tambah Data
-                                    </a>
-                                </div>
+                                <a href="renstra.php" class="d-flex align-items-center"><i class="fa fa-arrow-left"
+                                        style="color:black; font-size:20px"></i></a>
+                                <h3 class="ml-3">Tambah Rencana Strategis</h3>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tujuan</th>
-                                            <th>Sasaran Kegiatan</th>
-                                            <th>Kode</th>
-                                            <th>PIC</th>
-                                            <th>Indikator Kinerja Kegiatan</th>
-                                            <th>Indikator Kinerja Sub Kegiatan</th>
-                                            <th>Indikator Kinerja Unit Kerja</th>
-                                            <th>Target</th>
-                                            <th>Realisasi</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <!-- <tfoot>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
-                                            </tr>
-                                        </tfoot> -->
-                                    <tbody>
-                                        <?php
-                                        while($data = mysqli_fetch_array($indikator_kinerja_unit)){
-                                            echo "<tr>";
-                                            echo  "<td>" .$data['indikator_kinerja_id']. "</td>";
-                                            echo "<td>".$data['tujuan']."</td>";
-                                            echo "<td>".$data['sasaran_kegiatan']."</td>";
-                                            echo "<td>".$data['kode']."</td>";
-                                            echo "<td>".$data['nama_unit']."</td>";
-                                            echo "<td>".$data['indikator_kinerja_kegiatan']."</td>";
-                                            echo "<td>".$data['indikator_kinerja_sub_kegiatan']."</td>";
-                                            echo "<td>".$data['indikator_kinerja_unit_kerja']."</td>";
-                                            echo "<td>".$data['target']."</td>";
-                                            echo "<td>".$data['satuan']."</td>";
-                                            echo "<td><a href='edit_renstra.php?indikator_kinerja_id=$data[indikator_kinerja_id]'>Edit</a> | <a href='delete_renstra.php?indikator_kinerja_id=$data[indikator_kinerja_id]'>Delete</a></td></tr>";        
-                                            echo "</tr>";
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <form action="add_renstra.php" method="post" name="add_renstra">
+                                <input type="text" name="tujuan" placeholder="Tujuan" class="form-control">
+                                <br>
+                                <input type="text" name="sasaran_kegiatan" placeholder="Sasaran Kegiatan"
+                                    class="form-control">
+                                <br>
+                                <input type="text" name="kode" placeholder="Kode" class="form-control">
+                                <br>
+                                <input type="text" name="unit_id" placeholder="PIC" class="form-control">
+                                <br>
+                                <input type="text" name="indikator_kinerja_kegiatan"
+                                    placeholder="Indikator Kinerja Kegiatan" class="form-control">
+                                <br>
+                                <input type="text" name="indikator_kinerja_sub_kegiatan"
+                                    placeholder="Indikator Kinerja Sub Kegiatan" class="form-control">
+                                <br>
+                                <input type="text" name="indikator_kinerja_unit_kerja"
+                                    placeholder="Indikator Kinerja Unit Kerja" class="form-control">
+                                <br>
+                                <input type="text" name="target" placeholder="Target" class="form-control">
+                                <br>
+                                <input type="text" name="satuan" placeholder="Realisasi" class="form-control">
+                                <br>
+                                <div class="">
+                                    <input type="submit" name="submit" class="btn btn-primary" value="submit">
+                                </div>
+                                <!--Fungsi Add -->
+                                <?php
+                            if(isset($_POST['submit'])){
+                                $tujuan = $_POST['tujuan'];
+                                $sasaran_kegiatan = $_POST['sasaran_kegiatan'];
+                                $kode = $_POST['kode'];
+                                $unit_id = $_POST['unit_id'];
+                                $indikator_kinerja_kegiatan = $_POST['indikator_kinerja_kegiatan'];
+                                $indikator_kinerja_sub_kegiatan = $_POST['indikator_kinerja_sub_kegiatan'];
+                                $indikator_kinerja_unit_kerja = $_POST['indikator_kinerja_unit_kerja'];
+                                $target = $_POST['target'];
+                                $satuan = $_POST['satuan'];
+
+                                include_once("config.php");
+
+                                $insert_data = mysqli_query($mysql, 
+                                "INSERT INTO Indikator_Kinerja(
+                                    tujuan, 
+                                    sasaran_kegiatan, 
+                                    kode, 
+                                    unit_id, 
+                                    indikator_kinerja_kegiatan, 
+                                    indikator_kinerja_sub_kegiatan, 
+                                    indikator_kinerja_unit_kerja, 
+                                    target, 
+                                    satuan
+                                ) 
+                                VALUES 
+                                (
+                                    '$tujuan', 
+                                    '$sasaran_kegiatan', 
+                                    '$kode', 
+                                    '$unit_id', 
+                                    '$indikator_kinerja_kegiatan', 
+                                    '$indikator_kinerja_sub_kegiatan', 
+                                    '$indikator_kinerja_unit_kerja', 
+                                    '$target', 
+                                    '$satuan'
+                                )");
+                                echo "Tambah data berhasil. <a href='renstra.php'>Kembali</a>";
+                            }
+                            ?>
+                            </form>
+
+
                         </div>
                     </div>
                 </div>
